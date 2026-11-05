@@ -1,0 +1,25 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "Horse Stats",
+    "description": "Shows speed, jump height and health of horses, donkeys and mules. Use /scriptevent hs:stats or right-click with a stick.",
+    "uuid": "8f3c1a52-9b4d-4e77-a6c1-2d5f8a90b3c4",
+    "version": [1, 0, 0],
+    "min_engine_version": [1, 21, 70]
+  },
+  "modules": [
+    {
+      "type": "script",
+      "language": "javascript",
+      "uuid": "c2a94e17-5f68-4d31-b0e8-71c9f40d2e55",
+      "version": [1, 0, 0],
+      "entry": "scripts/main.js"
+    }
+  ],
+  "dependencies": [
+    {
+      "module_name": "@minecraft/server",
+      "version": "2.0.0"
+    }
+  ]
+}
