@@ -8,6 +8,9 @@ BDS 1.26.62.1).
 
 - **Right-click / use while holding a stick** while looking at a horse (or while riding one) — prints its stats in chat.
 - **`/scriptevent hs:stats`** — same thing, no stick needed.
+- **HUD:** whenever you look at (or ride) a horse, donkey or mule within 8 blocks,
+  a compact live stat line is shown on the actionbar above the hotbar, e.g.
+  `28/28❤ | 12.1 b/s | 4.0 jump`.
 
 Output example:
 

@@ -90,6 +90,37 @@ function statLine(entity) {
   return lines.join("\n§r");
 }
 
+function compactStats(entity) {
+  const health = entity.getComponent("minecraft:health");
+  const movement = entity.getComponent("minecraft:movement");
+  const jump = entity.getComponent("minecraft:horse.jump_strength");
+
+  const parts = [];
+  if (health) {
+    parts.push(`§c${health.currentValue}/${health.effectiveMax}❤`);
+  }
+  if (movement) {
+    parts.push(`§b${(movement.currentValue * SPEED_BLOCKS_PER_UNIT).toFixed(1)} b/s`);
+  }
+  if (jump) {
+    parts.push(`§a${jumpHeight(jump.currentValue).toFixed(1)} jump`);
+  } else {
+    const measured = bestMeasuredJumps.get(entity.id);
+    parts.push(measured
+      ? `§a${measured.toFixed(1)} jump`
+      : `§8jump: ride+jump to measure`);
+  }
+  return parts.join(`§7 | `);
+}
+
+system.runInterval(() => {
+  for (const player of world.getAllPlayers()) {
+    const equine = findEquine(player);
+    if (!equine || !equine.isValid) continue;
+    player.onScreenDisplay.setActionBar(compactStats(equine));
+  }
+}, 5);
+
 function showStats(player) {
   const equine = findEquine(player);
   if (!equine) {
