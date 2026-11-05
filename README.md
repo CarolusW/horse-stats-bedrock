@@ -22,22 +22,7 @@ Jump: 4.05 blocks (raw 0.812)
 
 1. Copy the `HorseStats` folder into your server's `behavior_packs/` directory,
    so you have `behavior_packs/HorseStats/manifest.json`.
-2. Register the pack in `valid_known_packs.json` (server root, next to
-   `server.properties`). This file tells joining clients which packs exist —
-   without an entry here, the server loads the pack but clients fail the join
-   handshake (generic "Terracotta" error). Keep the existing vanilla entries and
-   add yours, comma-separated:
-
-   ```json
-   {
-     "id": "8f3c1a52-9b4d-4e77-a6c1-2d5f8a90b3c4",
-     "version": [1, 0, 0],
-     "path": "behavior_packs/HorseStats"
-   }
-   ```
-
-   Adjust `path` to the actual folder name you used.
-3. Enable the pack for your world. Either:
+2. Enable the pack for your world. Either:
    - Run the server once, then in the world folder open `world_behavior_packs.json`
      and add:
 
@@ -51,8 +36,17 @@ Jump: 4.05 blocks (raw 0.812)
      ```
 
    - Or from an operator client: Settings > Behavior Packs while the world is loaded.
-4. Restart the server. No experiments need to be enabled — the pack only uses
+3. Restart the server. No experiments need to be enabled — the pack only uses
    the stable Script API.
+
+## Troubleshooting
+
+- If clients can't join after enabling the pack, enable content logging in
+  `server.properties` (`content-log-file-enabled=true` and
+  `content-log-console-output-enabled=true`), restart, and check the server
+  console/log during a join attempt — every pack error is written there.
+- Some very old guides mention `valid_known_packs.json`; that file no longer
+  exists in modern BDS and is not needed.
 
 ## Notes
 
