@@ -52,7 +52,10 @@ Jump: 4.05 blocks (raw 0.812)
 
 - Speed conversion uses the wiki factor 43.17 (internal units -> blocks/second);
   horse speed ranges 4.86 (min) to 14.57 (max) blocks/sec.
-- Jump height is computed from the `minecraft:horse.jump_strength` attribute
-  (0.4 = 1.15 blocks, 0.7 = 3.12, 1.0 = 5.92) and shown alongside the raw value.
-- Skeleton/zombie horses have fixed movement values and may not report a
-  jump_strength attribute; the pack says so instead of guessing.
+- Jump: the Bedrock Script API does not expose the horse's raw
+  `minecraft:horse.jump_strength` attribute, so the pack measures the real
+  jump height instead: ride the horse, jump once (hold the jump button for a
+  full charge to see the maximum), and the pack records the peak height in
+  blocks. The measurement lasts for the current server session.
+- Skeleton/zombie horses have fixed movement values; the pack says so
+  instead of guessing.

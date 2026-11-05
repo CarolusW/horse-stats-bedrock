@@ -30,6 +30,35 @@ function findEquine(player) {
   return undefined;
 }
 
+const bestMeasuredJumps = new Map();
+const trackers = new Map();
+
+system.runInterval(() => {
+  for (const player of world.getAllPlayers()) {
+    const riding = player.getComponent("minecraft:riding");
+    const mount = riding && riding.entity;
+    if (!mount || !mount.isValid || !EQUINE_TYPES.has(mount.typeId)) continue;
+    const y = mount.location.y;
+    if (mount.isOnGround) {
+      const tracker = trackers.get(mount.id);
+      if (tracker) {
+        const height = tracker.maxY - tracker.baseY;
+        if (height > 0.75) {
+          const prev = bestMeasuredJumps.get(mount.id) || 0;
+          if (height > prev) bestMeasuredJumps.set(mount.id, height);
+        }
+        tracker.baseY = y;
+        tracker.maxY = y;
+      } else {
+        trackers.set(mount.id, { baseY: y, maxY: y });
+      }
+    } else {
+      const tracker = trackers.get(mount.id);
+      if (tracker && y > tracker.maxY) tracker.maxY = y;
+    }
+  }
+}, 1);
+
 function statLine(entity) {
   const name = entity.nameTag && entity.nameTag.length > 0
     ? entity.nameTag
@@ -51,7 +80,12 @@ function statLine(entity) {
   if (jump) {
     lines.push(`§7Jump: §f${jumpHeight(jump.currentValue).toFixed(2)} blocks §7(raw ${jump.currentValue.toFixed(3)})`);
   } else {
-    lines.push(`§7Jump: §ffixed (this variant has no jump_strength attribute)`);
+    const measured = bestMeasuredJumps.get(entity.id);
+    if (measured) {
+      lines.push(`§7Jump: §f${measured.toFixed(2)} blocks §7(measured - hold jump to full charge for max)`);
+    } else {
+      lines.push(`§7Jump: §funknown §7- ride it and jump once, then check again`);
+    }
   }
   return lines.join("\n§r");
 }
