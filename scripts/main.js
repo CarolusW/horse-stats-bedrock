@@ -47,9 +47,8 @@ system.runInterval(() => {
       trackers.set(mount.id, t);
     }
     if (t.phase === "ground") {
-      if (vy > 0.25) {
+      if (vy > 0.2) {
         t.phase = "air";
-        t.baseY = y;
         t.maxY = y;
       } else {
         t.baseY = y;
@@ -94,7 +93,7 @@ function statLine(entity) {
   } else {
     const measured = bestMeasuredJumps.get(entity.id);
     if (measured) {
-      lines.push(`§7Jump: §f${measured.toFixed(2)} blocks §7(measured - hold jump to full charge for max)`);
+      lines.push(`§7Jump: §f${measured.toFixed(2)} blocks §7(best measured - hold jump to full charge for max)`);
     } else {
       lines.push(`§7Jump: §funknown §7- ride it and jump once, then check again`);
     }
