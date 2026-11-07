@@ -39,22 +39,33 @@ system.runInterval(() => {
     const mount = riding && riding.entity;
     if (!mount || !mount.isValid || !EQUINE_TYPES.has(mount.typeId)) continue;
     const y = mount.location.y;
-    if (mount.isOnGround) {
-      const tracker = trackers.get(mount.id);
-      if (tracker) {
-        const height = tracker.maxY - tracker.baseY;
-        if (height > 0.75) {
+    const vy = mount.getVelocity().y;
+    let t = trackers.get(mount.id);
+    if (!t) {
+      t = { phase: "ground", baseY: y, maxY: y };
+      trackers.set(mount.id, t);
+    }
+    if (t.phase === "ground") {
+      if (vy > 0.25) {
+        t.phase = "air";
+        t.baseY = y;
+        t.maxY = y;
+      } else {
+        t.baseY = y;
+        t.maxY = y;
+      }
+    } else {
+      if (y > t.maxY) t.maxY = y;
+      if (vy <= 0) {
+        const height = t.maxY - t.baseY;
+        if (height > 1.1) {
           const prev = bestMeasuredJumps.get(mount.id) || 0;
           if (height > prev) bestMeasuredJumps.set(mount.id, height);
         }
-        tracker.baseY = y;
-        tracker.maxY = y;
-      } else {
-        trackers.set(mount.id, { baseY: y, maxY: y });
+        t.phase = "ground";
+        t.baseY = y;
+        t.maxY = y;
       }
-    } else {
-      const tracker = trackers.get(mount.id);
-      if (tracker && y > tracker.maxY) tracker.maxY = y;
     }
   }
 }, 1);
