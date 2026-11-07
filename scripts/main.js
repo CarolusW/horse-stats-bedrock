@@ -18,8 +18,9 @@ function jumpHeight(strength) {
 
 function findEquine(player) {
   const riding = player.getComponent("minecraft:riding");
-  if (riding && riding.entity && EQUINE_TYPES.has(riding.entity.typeId)) {
-    return riding.entity;
+  const mount = riding && riding.entityRidingOn;
+  if (mount && EQUINE_TYPES.has(mount.typeId)) {
+    return mount;
   }
   const hits = player.getEntitiesFromViewDirection({ maxDistance: RAYCAST_DISTANCE });
   for (const hit of hits) {
@@ -36,7 +37,7 @@ const trackers = new Map();
 system.runInterval(() => {
   for (const player of world.getAllPlayers()) {
     const riding = player.getComponent("minecraft:riding");
-    const mount = riding && riding.entity;
+    const mount = riding && riding.entityRidingOn;
     if (!mount || !mount.isValid || !EQUINE_TYPES.has(mount.typeId)) continue;
     const y = mount.location.y;
     const vy = mount.getVelocity().y;
